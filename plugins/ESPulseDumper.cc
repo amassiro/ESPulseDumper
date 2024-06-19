@@ -19,6 +19,10 @@
 // system include files
 #include <memory>
 
+// std::cout
+#include <iostream>
+
+
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/one/EDAnalyzer.h"
@@ -28,8 +32,30 @@
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Utilities/interface/InputTag.h"
-#include "DataFormats/TrackReco/interface/Track.h"
-#include "DataFormats/TrackReco/interface/TrackFwd.h"
+// #include "DataFormats/TrackReco/interface/Track.h"
+// #include "DataFormats/TrackReco/interface/TrackFwd.h"
+
+
+#include "FWCore/Framework/interface/ESHandle.h"
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+#include "FWCore/Utilities/interface/ESGetToken.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
+
+
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "FWCore/ServiceRegistry/interface/Service.h"
+
+#include "TTree.h"
+
+
+//
+// ECAL / ES specific
+//
+
+#include "DataFormats/EcalDigi/interface/ESDataFrame.h"
+#include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
+
+
 //
 // class declaration
 //
@@ -39,7 +65,7 @@
 // from  edm::one::EDAnalyzer<>
 // This will improve performance in multithreaded jobs.
 
-using reco::TrackCollection;
+// using reco::TrackCollection;
 
 class ESPulseDumper : public edm::one::EDAnalyzer<edm::one::SharedResources> {
 public:
@@ -54,10 +80,43 @@ private:
   void endJob() override;
 
   // ----------member data ---------------------------
-  edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
-#ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
-  edm::ESGetToken<SetupData, SetupRecord> setupToken_;
-#endif
+  
+  edm::EDGetTokenT<ESDigiCollection> _token_ESdigiCollection;
+//   edm::EDGetTokenT<ESDigiCollection> ESdigiCollectionToken_;
+  
+  
+//   edm::EDGetTokenT<EcalUncalibratedRecHitCollection> _token_ebrechits;
+//   edm::EDGetTokenT<EcalUncalibratedRecHitCollection> _token_eerechits;
+//   
+//   edm::EDGetTokenT<EcalUncalibratedRecHitCollection> _token_second_ebrechits;
+//   edm::EDGetTokenT<EcalUncalibratedRecHitCollection> _token_second_eerechits;
+//   
+//   edm::EDGetTokenT<EBDigiCollection> _token_ebdigi;
+//   edm::EDGetTokenT<EEDigiCollection> _token_eedigi;
+  
+  
+  
+//   const EcalPedestals* _peds;
+  
+  
+  TTree *_outTree;
+  
+  UInt_t _run;
+  UShort_t _lumi;
+  UShort_t _bx;
+  UShort_t _event;      
+  
+  
+//   float _time_EB[61200];
+  
+  float _digi_ES[1000];
+  
+  
+  
+// //   edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
+// #ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
+//   edm::ESGetToken<SetupData, SetupRecord> setupToken_;
+// #endif
 };
 
 //
@@ -71,11 +130,42 @@ private:
 //
 // constructors and destructor
 //
-ESPulseDumper::ESPulseDumper(const edm::ParameterSet& iConfig)
-    : tracksToken_(consumes<TrackCollection>(iConfig.getUntrackedParameter<edm::InputTag>("tracks"))) {
-#ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
-  setupDataToken_ = esConsumes<SetupData, SetupRecord>();
-#endif
+ESPulseDumper::ESPulseDumper(const edm::ParameterSet& iConfig) {
+
+  //now do what ever initialization is needed
+  usesResource("TFileService");
+  
+  
+  //now do what ever initialization is needed
+  usesResource("TFileService");
+  edm::Service<TFileService> fs;
+  
+  _token_ESdigiCollection = consumes<ESDigiCollection>(iConfig.getParameter<edm::InputTag>("ESdigiCollection"));
+  
+//   
+//   _token_ebrechits = consumes<EcalUncalibratedRecHitCollection>(iConfig.getParameter<edm::InputTag>("EcalUncalibRecHitsEBCollection"));
+//   _token_eerechits = consumes<EcalUncalibratedRecHitCollection>(iConfig.getParameter<edm::InputTag>("EcalUncalibRecHitsEECollection"));
+//   
+//   _token_second_ebrechits = consumes<EcalUncalibratedRecHitCollection>(iConfig.getParameter<edm::InputTag>("EcalUncalibRecHitsEBCollectionSecond"));
+//   _token_second_eerechits = consumes<EcalUncalibratedRecHitCollection>(iConfig.getParameter<edm::InputTag>("EcalUncalibRecHitsEECollectionSecond"));
+//   
+//   _token_ebdigi = consumes<EBDigiCollection>(iConfig.getParameter<edm::InputTag>("EBDigiCollection"));
+//   _token_eedigi = consumes<EEDigiCollection>(iConfig.getParameter<edm::InputTag>("EEDigiCollection"));
+//   
+  
+  
+  _outTree = fs->make<TTree>("tree","tree");
+  
+  _outTree->Branch("run",               &_run,             "run/i");
+  _outTree->Branch("lumi",              &_lumi,            "lumi/s");
+  _outTree->Branch("bx",                &_bx,              "bx/s");
+  _outTree->Branch("event",             &_event,           "event/i");
+  
+  _outTree->Branch("digi_ES",        _digi_ES,        "digi_ES[1000]/F"); // 1000 TO BE FIXED
+  
+//   _outTree->Branch("time_EB",             _time_EB,             "time_EB[61200]/F");
+  
+  
   //now do what ever initialization is needed
 }
 
@@ -92,19 +182,116 @@ ESPulseDumper::~ESPulseDumper() {
 
 // ------------ method called for each event  ------------
 void ESPulseDumper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
-  using namespace edm;
+//   using namespace edm;
+// 
+//   for (const auto& track : iEvent.get(tracksToken_)) {
+//     // do something with track parameters, e.g, plot the charge.
+//     // int charge = track.charge();
+//   }
+// 
+// #ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
+//   // if the SetupData is always needed
+//   auto setup = iSetup.getData(setupToken_);
+//   // if need the ESHandle to check if the SetupData was there or not
+//   auto pSetup = iSetup.getHandle(setupToken_);
+// #endif
+  
+  
+  
+  _run = iEvent.eventAuxiliary().run();
+  _lumi = iEvent.eventAuxiliary().luminosityBlock();
+  _bx = iEvent.eventAuxiliary().bunchCrossing();
+  _event = iEvent.eventAuxiliary().event();
+  
+   
+  
+  //---- ES digi collections 
+  edm::Handle<ESDigiCollection> esdigihandle;
+  iEvent.getByToken(_token_ESdigiCollection, esdigihandle);
+  
+  if (!esdigihandle.isValid()) return;
+  
+  const ESDigiCollection* preshowerDigi = esdigihandle.product();
+  
+  
+  std::vector<double> esADCCounts;
+  esADCCounts.reserve(ESDataFrame::MAXSAMPLES);
+  
+  
+  int nDigis = 0;
+  
+  for (unsigned int digis = 0; digis < esdigihandle->size(); ++digis) {
+    ESDataFrame esdf = (*preshowerDigi)[digis];
+    int nrSamples = esdf.size();
+    
+//     ESDetId esid = esdf.id();
+    
+    nDigis++;
+    
+    for (int sample = 0; sample < nrSamples; ++sample) {
+//       esADCCounts[sample] = 0.;
+      std::cout << " test ... nrSamples =  " << nrSamples << std::endl;
+    }
+    
+    for (int sample = 0; sample < nrSamples; ++sample) {
+      ESSample mySample = esdf[sample];
+//       esADCCounts[sample] = (mySample.adc());
+      std::cout << " adc = " << (mySample.adc()) << std::endl;
+    }
+//     if (verbose_) {
+//       LogDebug("DigiInfo") << "Preshower Digi for ESDetId: z side " << esid.zside() << "  plane " << esid.plane()
+//       << esid.six() << ',' << esid.siy() << ':' << esid.strip();
+//       for (int i = 0; i < 3; i++) {
+//         LogDebug("DigiInfo") << "sample " << i << " ADC = " << esADCCounts[i];
+//       }
+//     }
+    
+//     for (int i = 0; i < 3; i++) {
+//       if (meESDigiADC_[i])
+//         meESDigiADC_[i]->Fill(esADCCounts[i]);
+//     }
 
-  for (const auto& track : iEvent.get(tracksToken_)) {
-    // do something with track parameters, e.g, plot the charge.
-    // int charge = track.charge();
   }
-
-#ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
-  // if the SetupData is always needed
-  auto setup = iSetup.getData(setupToken_);
-  // if need the ESHandle to check if the SetupData was there or not
-  auto pSetup = iSetup.getHandle(setupToken_);
-#endif
+  
+  
+  
+  //---- setup default
+//   for (int ixtal=0; ixtal < 61200; ixtal++) {
+//     for (int i=0; i<10; i++) _digi_ES[ixtal*10+i] = -999;
+//     _time_EB[ixtal] = -999;
+//     _time_second_EB[ixtal] = -999;
+//     _amplitude_EB[ixtal] = -999;
+//     _amplitude_second_EB[ixtal] = -999;
+//     _chi2_EB[ixtal] = -999;
+//     _chi2_second_EB[ixtal] = -999;
+//     _amplitudeError_EB[ixtal] = -999;
+//     _amplitudeError_second_EB[ixtal] = -999;
+//     _ieta[ixtal] = -999;
+//     _iphi[ixtal] = -999;
+//   }
+//   
+  
+  
+  
+  //---- dump digis
+  
+//   for (EBDigiCollection::const_iterator itdigi = ebdigis->begin(); itdigi != ebdigis->end(); itdigi++ ) {
+//     
+//     float pedestal = 0;    
+//     DetId id = (EBDetId&)((*itdigi));
+//     pedestal = float((_peds->find(id))->mean_x12);
+//     
+//     //                                                           0xFFF = 4095
+//     for (int iSample = 0; iSample < 10; iSample++) {
+//       float value = ( int( (*itdigi) [iSample] ) & 0xFFF );
+//       _digi_ES[((EBDetId&)((*itdigi))).hashedIndex() *10 + iSample] = value - pedestal;
+//     }
+//   }
+  
+  
+  _outTree->Fill();  
+  
+  
 }
 
 // ------------ method called once each job just before starting event loop  ------------

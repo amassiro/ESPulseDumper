@@ -1,5 +1,18 @@
-<use name="DataFormats/TrackReco"/>
 <use name="FWCore/Framework"/>
 <use name="FWCore/ParameterSet"/>
 <use name="FWCore/PluginManager"/>
+
+<use name="PhysicsTools/UtilAlgos"/>
+<use name="DataFormats/EcalDigi"/>
+<use name="DataFormats/EcalRecHit"/>
+<use name="Geometry/Records"/>
+<use name="Geometry/CaloGeometry"/>
+<use name="Geometry/EcalAlgo"/>
+<use name="CondFormats/ESObjects"/>
+<use name="CondFormats/EcalObjects"/>
+<use name="CondFormats/DataRecord"/>
+
+<use name="Geometry/EcalMapping"/>
+<use name="Geometry/CaloTopology"/>
+
 <flags EDM_PLUGIN="1"/>
