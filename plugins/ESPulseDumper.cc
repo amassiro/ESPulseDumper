@@ -119,6 +119,7 @@ private:
   int _ES_iy[6000]; // 
   int _ES_strip[6000]; // 
   
+  int _ES_num; // 
   
   
   
@@ -180,6 +181,9 @@ ESPulseDumper::ESPulseDumper(const edm::ParameterSet& iConfig) {
   _outTree->Branch("ES_ix",           _ES_ix,           "ES_ix[6000]/I"); // 
   _outTree->Branch("ES_iy",           _ES_iy,           "ES_iy[6000]/I"); // 
   _outTree->Branch("ES_strip",        _ES_strip,        "ES_strip[6000]/I"); // 
+  
+  _outTree->Branch("ES_num",          &_ES_num,         "ES_num/I"); // 
+  
   
   
   
@@ -256,9 +260,8 @@ void ESPulseDumper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     
   }
   
+  _ES_num = 0;
   
-  
-  int nDigis = 0;
   
   for (unsigned int digis = 0; digis < esdigihandle->size(); ++digis) {
     ESDataFrame esdf = (*preshowerDigi)[digis];
@@ -278,7 +281,7 @@ void ESPulseDumper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 //   static const int PLANE_MAX = 2;
 //   static const int IZ_NUM = 2;
     
-    int hashedIndex = nDigis;
+    int hashedIndex = _ES_num;
     
 //     std::cout << " hashedIndex = " << hashedIndex << std::endl;
     
@@ -295,7 +298,7 @@ void ESPulseDumper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       if (sample==2) _digi_ES_3[hashedIndex] = (mySample.adc());
     }
     
-    nDigis++;
+    _ES_num++;
     
   }
   
