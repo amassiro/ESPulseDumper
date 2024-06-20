@@ -109,7 +109,17 @@ private:
   
 //   float _time_EB[61200];
   
-  float _digi_ES[1000];
+  float _digi_ES_1[6000]; // 6000 (estimate)
+  float _digi_ES_2[6000]; // 6000 (estimate)
+  float _digi_ES_3[6000]; // 6000 (estimate)
+  
+  int _ES_zside[6000]; // 
+  int _ES_plane[6000]; // 
+  int _ES_ix[6000]; // 
+  int _ES_iy[6000]; // 
+  int _ES_strip[6000]; // 
+  
+  
   
   
   
@@ -161,7 +171,17 @@ ESPulseDumper::ESPulseDumper(const edm::ParameterSet& iConfig) {
   _outTree->Branch("bx",                &_bx,              "bx/s");
   _outTree->Branch("event",             &_event,           "event/i");
   
-  _outTree->Branch("digi_ES",        _digi_ES,        "digi_ES[1000]/F"); // 1000 TO BE FIXED
+  _outTree->Branch("digi_ES_1",        _digi_ES_1,        "digi_ES_1[6000]/F"); // 
+  _outTree->Branch("digi_ES_2",        _digi_ES_2,        "digi_ES_2[6000]/F"); // 
+  _outTree->Branch("digi_ES_3",        _digi_ES_3,        "digi_ES_3[6000]/F"); // 
+
+  _outTree->Branch("ES_zside",        _ES_zside,        "ES_zside[6000]/I"); // 
+  _outTree->Branch("ES_plane",        _ES_plane,        "ES_plane[6000]/I"); // 
+  _outTree->Branch("ES_ix",           _ES_ix,           "ES_ix[6000]/I"); // 
+  _outTree->Branch("ES_iy",           _ES_iy,           "ES_iy[6000]/I"); // 
+  _outTree->Branch("ES_strip",        _ES_strip,        "ES_strip[6000]/I"); // 
+  
+  
   
 //   _outTree->Branch("time_EB",             _time_EB,             "time_EB[61200]/F");
   
@@ -217,6 +237,26 @@ void ESPulseDumper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   std::vector<double> esADCCounts;
   esADCCounts.reserve(ESDataFrame::MAXSAMPLES);
   
+//   std::cout << " ESDataFrame::MAXSAMPLES = " << ESDataFrame::MAXSAMPLES << std::endl;
+//   std::cout << " esdigihandle->size() = " << esdigihandle->size() << std::endl;
+//   https://cmssdt.cern.ch/lxr/source/DataFormats/EcalDetId/interface/ESDetId.h
+//   https://cmssdt.cern.ch/lxr/source/DataFormats/EcalDetId/src/ESDetId.cc
+  
+  //---- setup default
+  for (int ixtal=0; ixtal < 6000; ixtal++) {
+    _digi_ES_1[ixtal] = -999;
+    _digi_ES_2[ixtal] = -999;
+    _digi_ES_3[ixtal] = -999;
+   
+    _ES_zside[ixtal] = -999;
+    _ES_plane[ixtal] = -999;
+    _ES_ix[ixtal] = -999;
+    _ES_iy[ixtal] = -999;
+    _ES_strip[ixtal] = -999;
+    
+  }
+  
+  
   
   int nDigis = 0;
   
@@ -224,52 +264,42 @@ void ESPulseDumper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     ESDataFrame esdf = (*preshowerDigi)[digis];
     int nrSamples = esdf.size();
     
-//     ESDetId esid = esdf.id();
+    ESDetId esid = esdf.id();
+ 
+//     int hashedIndex = esid.hashedIndex();
     
-    nDigis++;
+//   static const int IX_MIN = 1;
+//   static const int IY_MIN = 1;
+//   static const int IX_MAX = 40;
+//   static const int IY_MAX = 40;
+//   static const int ISTRIP_MIN = 1;
+//   static const int ISTRIP_MAX = 32;
+//   static const int PLANE_MIN = 1;
+//   static const int PLANE_MAX = 2;
+//   static const int IZ_NUM = 2;
     
-    for (int sample = 0; sample < nrSamples; ++sample) {
-//       esADCCounts[sample] = 0.;
-      std::cout << " test ... nrSamples =  " << nrSamples << std::endl;
-    }
+    int hashedIndex = nDigis;
+    
+//     std::cout << " hashedIndex = " << hashedIndex << std::endl;
+    
+    _ES_zside[hashedIndex] = esid.zside();
+    _ES_plane[hashedIndex] = esid.plane();
+    _ES_ix[hashedIndex] = esid.six();
+    _ES_iy[hashedIndex] = esid.siy();
+    _ES_strip[hashedIndex] = esid.strip();
     
     for (int sample = 0; sample < nrSamples; ++sample) {
       ESSample mySample = esdf[sample];
-//       esADCCounts[sample] = (mySample.adc());
-      std::cout << " adc = " << (mySample.adc()) << std::endl;
+      if (sample==0) _digi_ES_1[hashedIndex] = (mySample.adc());
+      if (sample==1) _digi_ES_2[hashedIndex] = (mySample.adc());
+      if (sample==2) _digi_ES_3[hashedIndex] = (mySample.adc());
     }
-//     if (verbose_) {
-//       LogDebug("DigiInfo") << "Preshower Digi for ESDetId: z side " << esid.zside() << "  plane " << esid.plane()
-//       << esid.six() << ',' << esid.siy() << ':' << esid.strip();
-//       for (int i = 0; i < 3; i++) {
-//         LogDebug("DigiInfo") << "sample " << i << " ADC = " << esADCCounts[i];
-//       }
-//     }
     
-//     for (int i = 0; i < 3; i++) {
-//       if (meESDigiADC_[i])
-//         meESDigiADC_[i]->Fill(esADCCounts[i]);
-//     }
-
+    nDigis++;
+    
   }
   
   
-  
-  //---- setup default
-//   for (int ixtal=0; ixtal < 61200; ixtal++) {
-//     for (int i=0; i<10; i++) _digi_ES[ixtal*10+i] = -999;
-//     _time_EB[ixtal] = -999;
-//     _time_second_EB[ixtal] = -999;
-//     _amplitude_EB[ixtal] = -999;
-//     _amplitude_second_EB[ixtal] = -999;
-//     _chi2_EB[ixtal] = -999;
-//     _chi2_second_EB[ixtal] = -999;
-//     _amplitudeError_EB[ixtal] = -999;
-//     _amplitudeError_second_EB[ixtal] = -999;
-//     _ieta[ixtal] = -999;
-//     _iphi[ixtal] = -999;
-//   }
-//   
   
   
   

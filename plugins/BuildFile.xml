@@ -15,4 +15,5 @@
 <use name="Geometry/EcalMapping"/>
 <use name="Geometry/CaloTopology"/>
 
+
 <flags EDM_PLUGIN="1"/>
