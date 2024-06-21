@@ -1,5 +1,5 @@
 
-void draw(){
+void drawOptimize(){
   
   TTree* mytree = (TTree*) _file0->Get("PulseTreeProducer/tree");
   
@@ -36,7 +36,10 @@ void draw(){
   mytree->SetBranchAddress("ES_strip", ES_strip);
   mytree->SetBranchAddress("ES_num", &ES_num);
   
-    
+
+  TH1F* h_LS = new TH1F("h_LS", "h_LS", 1000, 0, 1000 );
+  
+  
   TH2F* h_all = new TH2F("h_all", "all", 3,0,3, 2000,0,2000 );
   TH2F* h_all_normalized = new TH2F("h_all_normalized", "all normalized", 3,0,3, 100,0,1.1 );
   TH1F* h_all_ratio = new TH1F("h_all_ratio", "all ratio",300,0,100.0 );
@@ -60,8 +63,23 @@ void draw(){
   //   static const int IZ_NUM = 2;
   
   
-  for (int iEvent=0; iEvent<mytree->GetEntries(); iEvent++) {
+//   
+//   w0:w1:w2 = 0 : 0.7381 : 0.4667
+//   0.7381 / 0.4667
+//   (double) 1.5815299
+//   
+  
+  
+  int max_entries = mytree->GetEntries(); // 4000; // total = 84069
+//   mytree->GetEntries()
+// for (int iEvent=0; iEvent<max_entries; iEvent++) {
+  
+  for (int iEvent=0; iEvent<max_entries; iEvent++) {
     mytree->GetEntry(iEvent);
+    
+    if (lumi > 35) continue; // only first period of fill, with beamspot at ~ 0
+    
+    h_LS->Fill(lumi);
     
 //     std::cout << " ES_num = " << ES_num << std::endl;
     
@@ -70,14 +88,14 @@ void draw(){
       h_all->Fill (1., 1. * digi_ES_2[iES]);
       h_all->Fill (2., 1. * digi_ES_3[iES]);
       
-      if (digi_ES_2[iES] > 200) {
+      if (digi_ES_2[iES] > 5) {
         h_all_normalized->Fill (0., 1. * digi_ES_1[iES] / digi_ES_2[iES] );
         h_all_normalized->Fill (1., 1. * digi_ES_2[iES] / digi_ES_2[iES] );
         h_all_normalized->Fill (2., 1. * digi_ES_3[iES] / digi_ES_2[iES] );
       }
       
       
-      if (digi_ES_2[iES] > 200) {
+      if (digi_ES_2[iES] > 5) {
         h_all_ratio->Fill (1. * digi_ES_2[iES] / digi_ES_1[iES] );
         h_all_ratio2->Fill (1. * digi_ES_2[iES] / digi_ES_3[iES] );
        }
@@ -219,8 +237,10 @@ void draw(){
   h2_all_ratio->GetYaxis()->SetTitle("ratio 1/2");
   
   
+  TCanvas* ccLumi = new TCanvas ("ccLumi", "", 800, 600);
   
-  
+  h_LS->Draw();
+  h_LS->GetXaxis()->SetTitle("LS");
   
   
   
