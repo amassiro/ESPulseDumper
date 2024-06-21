@@ -16,4 +16,19 @@ Test
     
     
     
+    Interesting run:
+    /eos/cms/store/data/Run2024E/JetMET0/RAW/v1/000/381/594/00000/
     
+    copied here:   /eos/user/a/amassiro/ECAL/2024/Run381594/
+    
+    cmsRun runDump.py outputFile=test_MD.root inputFiles_load=myFiles.txt
+    cmsRun runDump.py outputFile=/tmp/amassiro/test_MD.root inputFiles_load=myFiles.txt
+
+    
+    
+    
+Plot
+
+    r99t  test.root  draw.cxx 
+    
+    r99t  test_MD.root  drawLS.cxx 

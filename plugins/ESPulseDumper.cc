@@ -245,6 +245,7 @@ void ESPulseDumper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 //   std::cout << " esdigihandle->size() = " << esdigihandle->size() << std::endl;
 //   https://cmssdt.cern.ch/lxr/source/DataFormats/EcalDetId/interface/ESDetId.h
 //   https://cmssdt.cern.ch/lxr/source/DataFormats/EcalDetId/src/ESDetId.cc
+//   https://github.com/cms-sw/cmssw/blob/master/RecoLocalCalo/EcalRecProducers/plugins/ESRecHitWorker.cc
   
   //---- setup default
   for (int ixtal=0; ixtal < 6000; ixtal++) {
