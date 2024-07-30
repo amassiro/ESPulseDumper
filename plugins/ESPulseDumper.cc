@@ -28,6 +28,7 @@
 #include "FWCore/Framework/interface/one/EDAnalyzer.h"
 
 #include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
@@ -54,6 +55,10 @@
 
 #include "DataFormats/EcalDigi/interface/ESDataFrame.h"
 #include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
+
+#include "CondFormats/ESObjects/interface/ESTimeSampleWeights.h"
+#include "CondFormats/DataRecord/interface/ESTimeSampleWeightsRcd.h"
+
 
 
 //
@@ -94,6 +99,9 @@ private:
 //   edm::EDGetTokenT<EBDigiCollection> _token_ebdigi;
 //   edm::EDGetTokenT<EEDigiCollection> _token_eedigi;
   
+  
+  edm::ESHandle<ESTimeSampleWeights> esWeights_;
+  edm::ESGetToken<ESTimeSampleWeights, ESTimeSampleWeightsRcd> esWeightsToken_;   
   
   
 //   const EcalPedestals* _peds;
@@ -153,6 +161,8 @@ ESPulseDumper::ESPulseDumper(const edm::ParameterSet& iConfig) {
   
   _token_ESdigiCollection = consumes<ESDigiCollection>(iConfig.getParameter<edm::InputTag>("ESdigiCollection"));
   
+  esWeightsToken_ = esConsumes<ESTimeSampleWeights, ESTimeSampleWeightsRcd>();
+    
 //   
 //   _token_ebrechits = consumes<EcalUncalibratedRecHitCollection>(iConfig.getParameter<edm::InputTag>("EcalUncalibRecHitsEBCollection"));
 //   _token_eerechits = consumes<EcalUncalibratedRecHitCollection>(iConfig.getParameter<edm::InputTag>("EcalUncalibRecHitsEECollection"));
@@ -220,6 +230,16 @@ void ESPulseDumper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 //   auto pSetup = iSetup.getHandle(setupToken_);
 // #endif
   
+  
+  esWeights_ = iSetup.getHandle(esWeightsToken_);
+  
+//   const ESTimeSampleWeights *wgts = esWeights_.product();
+//   
+//   float w0 = wgts->getWeightForTS0();
+//   float w1 = wgts->getWeightForTS1();
+//   float w2 = wgts->getWeightForTS2();
+//   
+//   std::cout << " w0:w1:w2 = " << w0 << " : " << w1 << " : " << w2 << std::endl;
   
   
   _run = iEvent.eventAuxiliary().run();

@@ -26,9 +26,24 @@ Test
 
     
     
+     w0:w1:w2 = 0 : 0.7381 : 0.4667
+    
     
 Plot
 
     r99t  test.root  draw.cxx 
     
     r99t  test_MD.root  drawLS.cxx 
+    
+    
+    
+Test:
+
+    - normalize to nominal ratio each channel
+    - redo plot
+    
+    - NB: averaging between 2 layers should improve time resolution?
+    
+    
+    
+    
