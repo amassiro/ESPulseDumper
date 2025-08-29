@@ -36,6 +36,6 @@ Other possible fills with cogging tests, i.e. Z-posizion of beamspot changed, th
     
     18/8/2025: Towards the end of the fill, https://cmsoms.cern.ch/cms/fills/report?cms_fill=10959
     
-    21/8/2025: for about 10 minutes test by LHC: https://cmsoms.cern.ch/cms/fills/report?cms_fill=10968
+    27/8/2025: for about 10 minutes test by LHC: https://cmsoms.cern.ch/cms/fills/report?cms_fill=10984
     
     
