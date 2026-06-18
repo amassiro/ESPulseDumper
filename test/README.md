@@ -36,6 +36,7 @@ Test
      /eos/cms/store/data/Run2025B/ZeroBias/RAW/v1/000/391/668/00000/a01a5be6-7d9a-44ab-8dec-db99b72fce22.root
      copied here:   /eos/user/a/amassiro/ECAL/2025/Run391668/
      cmsRun runDump.py outputFile=/tmp/amassiro/test_MD_2025.root inputFiles_load=myFiles2025.txt
+     NB: need to run in CMSSW_15_0_5 release
 
 
      18/8/2025: Towards the end of the fill, https://cmsoms.cern.ch/cms/fills/report?cms_fill=10959
@@ -59,7 +60,7 @@ Plot
     
     r99t  test_MD.root  drawLS.cxx 
     
-    
+    ES_plane: can be 1 or 2 as value
     
 Test:
 
