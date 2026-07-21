@@ -68,6 +68,76 @@ Test:
     
     - NB: averaging between 2 layers should improve time resolution?
     
-    
-    
+
+Get Lumisections:
+
+    https://cmsoms.cern.ch
+    https://cmsoms.cern.ch/agg/api/v1/lumisections?fields=lumisection_number,start_time,end_time,physics_flag&page[offset]=0&page[limit]=10&filter[cms_active][EQ]=true&filter[start_time][GT]=2026-05-08T13:41:46Z&filter[end_time][LT]=2026-05-11T11:04:58Z&sort=-lumisection_number&include=meta,presentation_timestamp
+
+    https://cmsoms.cern.ch/agg/api/v1/lumisections?fields=lumisection_number,start_time,end_time,physics_flag&page[offset]=0&page[limit]=10&filter[cms_active][EQ]=true&filter[start_time][GT]=2026-05-08T13:41:46Z&filter[end_time][LT]=2026-05-11T11:04:58Z&sort=-lumisection_number&include=meta,presentation_timestamp
+
+Transfer:
+
+    https://cmsdmops.docs.cern.ch/Users/Subscribe%20data/
+
+
+
+
+    source /cvmfs/cms.cern.ch/rucio/setup-py3.sh
+    voms-proxy-init -voms cms -rfc -valid 192:00
+    export RUCIO_ACCOUNT=`whoami`
+
+
+Rule asking for a dataset to be replicated at CERN DISK for a 1 month
+
+    rucio rule add \
+        --copies 1 \
+        --rses T2_CH_CERN \
+        --lifetime 2592000 \
+        --activity "User AutoApprove" \
+        --ask-approval \
+        --comment "ECAL ES studies" \
+        cms:/store/data/Run2025B/EGamma0/RAW/v1/000/391/668/00000/5f4e6111-8754-4591-8107-91721de31c5d.root
+
+
+    rucio rule add \
+        --copies 1 \
+        --rses T2_CH_CERN \
+        --lifetime 2592000 \
+        --activity "User AutoApprove" \
+        --ask-approval \
+        --comment "ECAL ES studies" \
+        cms:/store/data/Run2025B/EGamma1/RAW/v1/000/391/668/00000/467b13c2-8084-4827-8f19-0007a4e45de0.root
+
+
+    rucio rule add \
+        --copies 1 \
+        --rses T2_CH_CERN \
+        --lifetime 2592000 \
+        --activity "User AutoApprove" \
+        --ask-approval \
+        --comment "ECAL ES studies" \
+        cms:/store/data/Run2025B/EGamma0/RAW/v1/000/391/668/00000/5f4e6111-8754-4591-8107-91721de31c5d.root
+
+
+    rucio rule add \
+        --copies 1 \
+        --rses T2_CH_CERN \
+        --lifetime 2592000 \
+        --activity "User AutoApprove" \
+        --ask-approval \
+        --comment "ECAL ES studies" \
+        cms:/store/data/Run2025B/EGamma0/RAW/v1/000/391/668/00000/5f4e6111-8754-4591-8107-91721de31c5d.root
+
+
+        cms:/EGamma0/Run2025B-v1/RAW
+
+
+        file dataset=/EGamma0/Run2025B-v1/RAW run=391668
+
+
+Run 391668
+
+
+
     
