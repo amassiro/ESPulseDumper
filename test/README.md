@@ -117,7 +117,7 @@ Rule asking for a dataset to be replicated at CERN DISK for a 1 month
         --activity "User AutoApprove" \
         --ask-approval \
         --comment "ECAL ES studies" \
-        cms:/store/data/Run2025B/EGamma0/RAW/v1/000/391/668/00000/5f4e6111-8754-4591-8107-91721de31c5d.root
+        cms:/store/data/Run2025B/EGamma2/RAW/v1/000/391/668/00000/21ce2e2c-d654-435a-93b0-f9968e0d2f41.root
 
 
     rucio rule add \
@@ -127,17 +127,27 @@ Rule asking for a dataset to be replicated at CERN DISK for a 1 month
         --activity "User AutoApprove" \
         --ask-approval \
         --comment "ECAL ES studies" \
-        cms:/store/data/Run2025B/EGamma0/RAW/v1/000/391/668/00000/5f4e6111-8754-4591-8107-91721de31c5d.root
+        cms:/store/data/Run2025B/EGamma3/RAW/v1/000/391/668/00000/53d1bd12-e3fd-4b8d-9495-1810c789004f.root
 
+
+
+A bit too much:
 
         cms:/EGamma0/Run2025B-v1/RAW
 
+On DAS:
 
         file dataset=/EGamma0/Run2025B-v1/RAW run=391668
+        file dataset=/EGamma1/Run2025B-v1/RAW run=391668
+        file dataset=/EGamma2/Run2025B-v1/RAW run=391668
+        file dataset=/EGamma3/Run2025B-v1/RAW run=391668
 
+On eos:
 
-Run 391668
-
+    /eos/cms/store/data/Run2025B/EGamma0/RAW/v1/000/391/668/00000/
+    /eos/cms/store/data/Run2025B/EGamma1/RAW/v1/000/391/668/00000/
+    /eos/cms/store/data/Run2025B/EGamma2/RAW/v1/000/391/668/00000/
+    /eos/cms/store/data/Run2025B/EGamma3/RAW/v1/000/391/668/00000/
 
 
     
