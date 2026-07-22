@@ -144,10 +144,11 @@ On DAS:
 
 On eos:
 
-    /eos/cms/store/data/Run2025B/EGamma0/RAW/v1/000/391/668/00000/
-    /eos/cms/store/data/Run2025B/EGamma1/RAW/v1/000/391/668/00000/
-    /eos/cms/store/data/Run2025B/EGamma2/RAW/v1/000/391/668/00000/
-    /eos/cms/store/data/Run2025B/EGamma3/RAW/v1/000/391/668/00000/
+    /eos/cms/store/data/Run2025B/EGamma0/RAW/v1/000/391/668/00000/5f4e6111-8754-4591-8107-91721de31c5d.root
+    /eos/cms/store/data/Run2025B/EGamma1/RAW/v1/000/391/668/00000/467b13c2-8084-4827-8f19-0007a4e45de0.root
+    /eos/cms/store/data/Run2025B/EGamma2/RAW/v1/000/391/668/00000/21ce2e2c-d654-435a-93b0-f9968e0d2f41.root
+    /eos/cms/store/data/Run2025B/EGamma3/RAW/v1/000/391/668/00000/53d1bd12-e3fd-4b8d-9495-1810c789004f.root
 
 
     
+    cmsRun runDump.py outputFile=/tmp/amassiro/test_Run2025B.root inputFiles_load=myFilesRun2025B.txt
