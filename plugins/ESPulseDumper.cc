@@ -314,6 +314,9 @@ void ESPulseDumper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     
     for (int sample = 0; sample < nrSamples; ++sample) {
       ESSample mySample = esdf[sample];
+
+      if (hashedIndex > 5000) std::cout << " hashedIndex = " << hashedIndex << std::endl;
+
       if (sample==0) _digi_ES_1[hashedIndex] = (mySample.adc());
       if (sample==1) _digi_ES_2[hashedIndex] = (mySample.adc());
       if (sample==2) _digi_ES_3[hashedIndex] = (mySample.adc());
