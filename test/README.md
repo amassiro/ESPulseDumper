@@ -59,8 +59,11 @@ Plot
     
     r99t  test_MD.root  drawLS.cxx 
     
-    
-    
+    r99t  test_Run2025B.root  draw.cxx
+
+    r99t  test_Run2025B.root  drawLS.cxx
+
+
 Test:
 
     - normalize to nominal ratio each channel
