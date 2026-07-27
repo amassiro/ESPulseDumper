@@ -6,28 +6,28 @@ Test
 
     cmsRun runDump.py  inputFiles=file:/eos/user/a/amassiro/ECAL/2024/49c2a175-5eb6-4377-98c8-31895c4367b5.root   outputFile=test.root
 
-    
-    
+
+
     EGamma1/Run2024E-EGMJME-PromptReco-v1/RAW-RECO
-    
+
     /eos/cms/store/data/Run2024E/EGamma1/RAW-RECO/EGMJME-PromptReco-v1/000/381/365/00000/49c2a175-5eb6-4377-98c8-31895c4367b5.root
     still on eos and copied here
     /eos/user/a/amassiro/ECAL/2024/49c2a175-5eb6-4377-98c8-31895c4367b5.root
-    
-    
-    
+
+
+
     Interesting run:
     /eos/cms/store/data/Run2024E/JetMET0/RAW/v1/000/381/594/00000/
-    
+
     copied here:   /eos/user/a/amassiro/ECAL/2024/Run381594/
-    
+
     cmsRun runDump.py outputFile=test_MD.root inputFiles_load=myFiles.txt
     cmsRun runDump.py outputFile=/tmp/amassiro/test_MD.root inputFiles_load=myFiles.txt
 
-    
-    
+
+
      w0:w1:w2 = 0 : 0.7381 : 0.4667
-    
+
 
      5/5/2025: beginning of the fill, 3 cm effect: https://cmsoms.cern.ch/cms/fills/report?cms_fill=10590
      /eos/cms/store/data/Run2025B/*/RA*/*/*/391/668/*/*.root
@@ -42,6 +42,8 @@ Test
      /eos/cms/store/data/Run2025E/*/RA*/*/*/395/987/*/*.root
      run 395987
      --> no RAW on disk
+     https://cmsoms.cern.ch/cms/runs/report?cms_run=395987
+     LS 750 - 878
 
 
      27/8/2025: for about 10 minutes test by LHC: https://cmsoms.cern.ch/cms/fills/report?cms_fill=10984
@@ -55,22 +57,19 @@ Test
 
 Plot
 
-    r99t  test.root  draw.cxx 
-    
-    r99t  test_MD.root  drawLS.cxx 
-    
-    r99t  test_Run2025B.root  draw.cxx
+    r99t  test.root  draw.cxx
 
-    r99t  test_Run2025B.root  drawLS.cxx
+    r99t  test_MD.root  drawLS.cxx
+
 
 
 Test:
 
     - normalize to nominal ratio each channel
     - redo plot
-    
+
     - NB: averaging between 2 layers should improve time resolution?
-    
+
 
 Get Lumisections:
 
@@ -133,6 +132,46 @@ Rule asking for a dataset to be replicated at CERN DISK for a 1 month
         cms:/store/data/Run2025B/EGamma3/RAW/v1/000/391/668/00000/53d1bd12-e3fd-4b8d-9495-1810c789004f.root
 
 
+Automatically from list of files ...
+
+
+while read -r file; do
+[ -z "$file" ] && continue
+
+cat <<EOF
+rucio rule add \\
+        --copies 1 \\
+        --rses T2_CH_CERN \\
+        --lifetime 2592000 \\
+        --activity "User AutoApprove" \\
+        --ask-approval \\
+        --comment "ECAL ES studies" \\
+        cms:$file
+
+EOF
+done < test.txt > add_rules.sh
+
+
+
+
+
+while read -r file; do
+[ -z "$file" ] && continue
+
+cat <<EOF
+rucio rule add \\
+        --copies 1 \\
+        --rses T2_CH_CERN \\
+        --lifetime 2592000 \\
+        --activity "User AutoApprove" \\
+        --ask-approval \\
+        --comment "ECAL ES studies" \\
+        cms:$file
+
+EOF
+done < test2.txt > add_rules_2.sh
+
+
 
 A bit too much:
 
@@ -145,6 +184,23 @@ On DAS:
         file dataset=/EGamma2/Run2025B-v1/RAW run=391668
         file dataset=/EGamma3/Run2025B-v1/RAW run=391668
 
+
+        file dataset=/EGamma0/Run2025E-v1/RAW run=395987  lumi=750
+
+        dasgoclient -query="file,lumi dataset=/EGamma0/Run2025E-v1/RAW run=395987" -json >> test.txt
+
+        dasgoclient -query="file,lumi dataset=/EGamma0/Run2025E-v1/RAW run=395987 | grep file.name, lumi.number" | tr "[" " " | tr "]" " " | awk '$2 >= 750 && $2 <= 878 {print $1}' | sort -u
+        dasgoclient -query="file,lumi dataset=/EGamma0/Run2025E-v1/RAW run=395987 | grep file.name, lumi.number" | tr "[" " " | tr "]" " " | awk '$2 >= 750 && $2 <= 878 {print $1}' | sort -u > test.txt
+
+        dasgoclient -query="file,lumi dataset=/EGamma0/Run2025E-v1/RAW run=395987 | grep file.name, lumi.number" | tr "[" " " | tr "]" " " | awk '$2 >= 750 && $2 <= 878 {print $1 $2}' | sort -u
+
+
+
+        dasgoclient -query="file,lumi dataset=/EGamma0/Run2025E-v1/RAW run=396260 | grep file.name, lumi.number" | tr "[" " " | tr "]" " " | awk '$2 >= 550 && $2 <= 600 {print $1}' | sort -u > test2.txt
+
+
+
+
 On eos:
 
     /eos/cms/store/data/Run2025B/EGamma0/RAW/v1/000/391/668/00000/5f4e6111-8754-4591-8107-91721de31c5d.root
@@ -153,5 +209,10 @@ On eos:
     /eos/cms/store/data/Run2025B/EGamma3/RAW/v1/000/391/668/00000/53d1bd12-e3fd-4b8d-9495-1810c789004f.root
 
 
-    
+
     cmsRun runDump.py outputFile=/tmp/amassiro/test_Run2025B.root inputFiles_load=myFilesRun2025B.txt
+
+
+
+
+    /eos/cms/store/data/Run2025E/EGamma0/RAW/v1/000/396/260/00000/05ee8e8f-6ff1-4f29-b557-dcfafd342676.root
