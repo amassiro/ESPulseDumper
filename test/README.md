@@ -32,10 +32,10 @@ Test
      5/5/2025: beginning of the fill, 3 cm effect: https://cmsoms.cern.ch/cms/fills/report?cms_fill=10590
      /eos/cms/store/data/Run2025B/*/RA*/*/*/391/668/*/*.root
      run 391668
-
      /eos/cms/store/data/Run2025B/ZeroBias/RAW/v1/000/391/668/00000/a01a5be6-7d9a-44ab-8dec-db99b72fce22.root
      copied here:   /eos/user/a/amassiro/ECAL/2025/Run391668/
      cmsRun runDump.py outputFile=/tmp/amassiro/test_MD_2025.root inputFiles_load=myFiles2025.txt
+
 
 
      18/8/2025: Towards the end of the fill, https://cmsoms.cern.ch/cms/fills/report?cms_fill=10959
