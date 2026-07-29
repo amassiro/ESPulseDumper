@@ -217,5 +217,3 @@ On eos:
     cmsRun runDump.py outputFile=/tmp/amassiro/test_Run395987.root inputFiles_load=myFilesRun2025E_Run395987.txt
     cmsRun runDump.py outputFile=/tmp/amassiro/test_Run396260.root inputFiles_load=myFilesRun2025E_Run396260.txt
 
-
-    /eos/cms/store/data/Run2025E/EGamma0/RAW/v1/000/396/260/00000/05ee8e8f-6ff1-4f29-b557-dcfafd342676.root
