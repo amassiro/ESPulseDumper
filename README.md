@@ -42,6 +42,7 @@ Other possible fills with cogging tests, i.e. Z-posizion of beamspot changed, th
 
     5/5/2025: beginning of the fill, 3 cm effect: https://cmsoms.cern.ch/cms/fills/report?cms_fill=10590
             data skimmed: /eos/user/a/amassiro/ECAL/2026/test_Run391668.root
+            about 0.3 GB
 
 
     18/8/2025: Towards the end of the fill, https://cmsoms.cern.ch/cms/fills/report?cms_fill=10959
@@ -50,7 +51,8 @@ Other possible fills with cogging tests, i.e. Z-posizion of beamspot changed, th
 
 
     27/8/2025: for about 10 minutes test by LHC: https://cmsoms.cern.ch/cms/fills/report?cms_fill=10984
-            data skimmed:
+            data skimmed: /eos/user/a/amassiro/ECAL/2026/test_Run396260.root
+            about ...
 
     
 
