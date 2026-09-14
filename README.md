@@ -52,7 +52,7 @@ Other possible fills with cogging tests, i.e. Z-posizion of beamspot changed, th
 
     27/8/2025: for about 10 minutes test by LHC: https://cmsoms.cern.ch/cms/fills/report?cms_fill=10984
             data skimmed: /eos/user/a/amassiro/ECAL/2026/test_Run396260.root
-            about ...
+            about 1 GB (but not all files analysed ... not enough time to run in local yet)
 
     
 
