@@ -3,12 +3,18 @@ ESPulseDumper
 
 Kate:
 
-    lxplus-ECAL
+    lxplus-ECAL-ES
 
 Where:
 
     /afs/cern.ch/user/a/amassiro/work/ECAL/
     /afs/cern.ch/user/a/amassiro/work/ECAL/CMSSW_14_0_7_patch2/src/ECALValidation/ESPulseDumper
+    /afs/cern.ch/user/a/amassiro/work/ECAL/CMSSW_15_0_5/src/ECALValidation/ESPulseDumper/test
+
+Where local:
+
+    /home/amassiro/Cern/Code/ECAL/ESPulseDumper
+
 
 To install:
 
