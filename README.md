@@ -37,7 +37,8 @@ Test on:
 Other possible fills with cogging tests, i.e. Z-posizion of beamspot changed, thus indirectly a time scan for ES
 
     5/6/2024: https://cmsoms.cern.ch/cms/fills/report?cms_fill=9717
-            data skimmed:
+            data skimmed: /eos/user/a/amassiro/ECAL/2026/test_Run381594.root
+            [only part of it so far]
 
 
     5/5/2025: beginning of the fill, 3 cm effect: https://cmsoms.cern.ch/cms/fills/report?cms_fill=10590

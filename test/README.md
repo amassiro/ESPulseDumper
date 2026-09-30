@@ -199,7 +199,10 @@ On DAS:
         dasgoclient -query="file,lumi dataset=/EGamma0/Run2025E-v1/RAW run=396260 | grep file.name, lumi.number" | tr "[" " " | tr "]" " " | awk '$2 >= 550 && $2 <= 600 {print $1}' | sort -u > test2.txt
 
 
-
+        file dataset=/EGamma0/Run2024E-v1/RAW run=381594
+        dasgoclient -query="file,lumi dataset=/EGamma0/Run2024E-v1/RAW run=381594 | grep file.name, lumi.number" | tr "[" " " | tr "]" " " | awk '$2 >= 10 && $2 <= 600 {print $1}' | sort -u > test2024.txt
+        dasgoclient -query="file,lumi dataset=/EGamma0/Run2024E-v1/RAW run=381594 | grep file.name, lumi.number" | tr "[" " " | tr "]" " " | awk '$2 >= 1 && $2 <= 600 {print $1}' | sort -u > test2024.txt
+        dasgoclient -query="file,lumi dataset=/EGamma0/Run2024E-v1/RAW run=381594 | grep file.name, lumi.number" | tr "[" " " | tr "]" " " | awk '{print $1}' | sort -u > test2024.txt
 
 On eos:
 
@@ -213,6 +216,9 @@ On eos:
     cmsRun runDump.py outputFile=/tmp/amassiro/test_Run2025B.root inputFiles_load=myFilesRun2025B.txt
 
 
+
+
+    cmsRun runDump.py outputFile=/tmp/amassiro/test_Run381594.root inputFiles_load=myFilesRun2024E_run381594.txt
     cmsRun runDump.py outputFile=/tmp/amassiro/test_Run391668.root inputFiles_load=myFilesRun2025B_run391668.txt
     cmsRun runDump.py outputFile=/tmp/amassiro/test_Run395987.root inputFiles_load=myFilesRun2025E_Run395987.txt
     cmsRun runDump.py outputFile=/tmp/amassiro/test_Run396260.root inputFiles_load=myFilesRun2025E_Run396260.txt
