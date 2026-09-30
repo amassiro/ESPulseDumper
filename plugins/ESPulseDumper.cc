@@ -112,7 +112,7 @@ private:
   UInt_t _run;
   UShort_t _lumi;
   UShort_t _bx;
-  UShort_t _event;      
+  UInt_t _event;
   
   
 //   float _time_EB[61200];
@@ -315,7 +315,8 @@ void ESPulseDumper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     for (int sample = 0; sample < nrSamples; ++sample) {
       ESSample mySample = esdf[sample];
 
-      if (hashedIndex > 5500) std::cout << " hashedIndex = " << hashedIndex << std::endl;
+      // if (hashedIndex > 5500) std::cout << " hashedIndex = " << hashedIndex << std::endl;
+      if (hashedIndex > 6500) std::cout << " hashedIndex = " << hashedIndex << std::endl;
 
       if (sample==0) _digi_ES_1[hashedIndex] = (mySample.adc());
       if (sample==1) _digi_ES_2[hashedIndex] = (mySample.adc());
